@@ -1,13 +1,11 @@
 import json
 from pathlib import Path
-from collections import Counter, defaultdict
+from collections import Counter
 
-# config
 DATA_ROOT = Path("data/detection_1")
 SPLITS = ["train", "valid", "test"]
 COCO_NAME = "_annotations.coco.json"
 
-# taxonomy đích 7 lớp
 TARGET_CLASSES = [
     "biological",
     "cardboard",
@@ -58,25 +56,16 @@ def remap_one_split(split_dir: Path):
     with coco_path.open("r", encoding="utf-8") as f:
         coco = json.load(f)
 
-    # id cũ -> name cũ
     old_id_to_name = {c["id"]: c["name"] for c in coco["categories"]}
-
-    # validate mapping phủ đủ category cũ
     unknown_old_names = sorted(set(old_id_to_name.values()) - set(MAP_25_TO_7.keys()))
     if unknown_old_names:
-        raise ValueError(
-            f"[{split_dir.name}] Unmapped old categories found: {unknown_old_names}"
-        )
+        raise ValueError(f"[{split_dir.name}] Unmapped old categories found: {unknown_old_names}")
 
-    # map old category_id -> new category_id
     old_id_to_new_id = {}
     for old_id, old_name in old_id_to_name.items():
         new_name = MAP_25_TO_7[old_name]
-        if new_name not in TARGET_ID:
-            raise ValueError(f"Mapped new class '{new_name}' is not in TARGET_CLASSES")
         old_id_to_new_id[old_id] = TARGET_ID[new_name]
 
-    # remap annotations
     new_annotations = []
     dropped = 0
     per_new_class = Counter()
@@ -88,7 +77,6 @@ def remap_one_split(split_dir: Path):
             continue
 
         x, y, w, h = ann["bbox"]
-        # lọc bbox lỗi
         if w <= 0 or h <= 0:
             dropped += 1
             continue
@@ -98,9 +86,7 @@ def remap_one_split(split_dir: Path):
         new_annotations.append(new_ann)
         per_new_class[new_ann["category_id"]] += 1
 
-    # categories mới 7 lớp
     new_categories = [{"id": i, "name": name} for i, name in enumerate(TARGET_CLASSES)]
-
     new_coco = {
         "info": coco.get("info", {}),
         "licenses": coco.get("licenses", []),

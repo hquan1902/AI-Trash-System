@@ -13,6 +13,7 @@ __pycache__/
 
 # dataset
 data/
+!src/data/
 
 venv/
 
