@@ -1,0 +1,19 @@
+# Core DL (install torch/torchvision from CUDA index URL when using NVIDIA GPU)
+torch==2.6.0
+torchvision==0.21.0
+
+opencv-python==4.10.0.84
+albumentations==1.4.18
+numpy==1.26.4
+pillow==10.4.0
+pandas==2.2.3
+
+scikit-learn==1.5.2
+matplotlib==3.9.2
+seaborn==0.13.2
+
+fastapi==0.115.2
+uvicorn==0.32.0
+streamlit==1.39.0
+plotly==5.24.1
+easyocr==1.7.1

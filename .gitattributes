@@ -1,0 +1,12 @@
+# Ép buộc tất cả các file text mặc định dùng LF khi commit và checkout
+* text eol=lf
+
+# Ép buộc riêng cho file cấu hình, mã nguồn Python và Jupyter Notebook
+*.py text eol=lf
+*.ipynb text eol=lf
+*.json text eol=lf
+
+# Giữ nguyên định dạng nhị phân cho hình ảnh và các file dữ liệu khác
+*.png binary
+*.jpg binary
+*.jpeg binary
