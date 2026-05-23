@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from src.common.data_pipeline import ClassificationDataset, train_transform, val_transform
-from src.model_classify import TrashNet
+from src.classification.models.model_classify import TrashNet
 
 
 def seed_everything(seed=42):

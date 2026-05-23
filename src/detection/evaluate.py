@@ -5,8 +5,8 @@ import torch
 from torch.utils.data import DataLoader
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
 
-from src.data_pipeline import COCODetectionDataset, detection_collate_fn
-from src.model_detect import build_detection_model
+from src.common.data_pipeline import COCODetectionDataset, detection_collate_fn
+from src.detection.models.model_detect import build_detection_model
 
 
 def evaluate_map(

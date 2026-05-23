@@ -39,8 +39,8 @@ def _resolve_model_path(model_path: str | None = None) -> str:
 	candidates = [
 		"models/model_detection_best_7_4.pth",
 		"models/model_detection_best_map5095_7_4.pth",
-		"models/pretrained/model_detection_pretrained_best_map5095_29_4.pth",
-		"models/pretrained/model_detection_pretrained_best_map50_29_4.pth",
+		"models/pretrained/model_detection_pretrained_best_map5095.pth",
+		"models/pretrained/model_detection_pretrained_best_map50.pth",
 		"models/pretrained/model_detection_pretrained_last.pth",
 		"models/model_detection_last.pth",
 	]
@@ -51,8 +51,8 @@ def _resolve_model_path(model_path: str | None = None) -> str:
 	raise FileNotFoundError(
 		"Không tìm thấy checkpoint detection. Hãy đảm bảo có một trong các file: "
 		"models/model_detection_best_7_4.pth, models/model_detection_best_map5095_7_4.pth, "
-		"models/pretrained/model_detection_pretrained_best_map5095_29_4.pth, "
-		"models/pretrained/model_detection_pretrained_best_map50_29_4.pth hoặc models/model_detection_last.pth"
+		"models/pretrained/model_detection_pretrained_best_map5095.pth, "
+		"models/pretrained/model_detection_pretrained_best_map50.pth hoặc models/model_detection_last.pth"
 	)
 
 

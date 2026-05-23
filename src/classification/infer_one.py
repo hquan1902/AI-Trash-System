@@ -1,7 +1,7 @@
 import cv2
 import torch
 import numpy as np
-from src.model_classify import TrashNet
+from src.classification.models.model_classify import TrashNet
 
 
 CKPT_PATH = "models/model_classification_best.pth"

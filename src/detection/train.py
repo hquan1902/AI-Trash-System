@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
 
 from src.common.data_pipeline import COCODetectionDataset, detection_collate_fn
-from src.model_detect import build_detection_model
+from src.detection.models.model_detect import build_detection_model
 from torch.amp import autocast, GradScaler
 from torch.optim.lr_scheduler import LinearLR, CosineAnnealingLR, SequentialLR, StepLR
 

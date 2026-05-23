@@ -264,3 +264,4 @@ with col2:
 	else:
 		st.warning("Không có bbox nào vượt qua ngưỡng hiện tại. Hãy giảm score threshold.")
 		st.info("Kết luận: chưa đủ bằng chứng để kết luận class từ ảnh hiện tại với ngưỡng đang chọn.")
+#python -m streamlit run web/app.py

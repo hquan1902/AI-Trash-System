@@ -30,7 +30,7 @@ def build_detection_model(num_classes: int, use_pretrained: bool = False, varian
             )
 
     in_features = model.roi_heads.box_predictor.cls_score.in_features
-    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes + 1)
+    model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes + 1)  # +1 background
     return model
 
 
