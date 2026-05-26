@@ -94,12 +94,31 @@ def load_friend_detector(model_path: str = "models/model_detection_pretrained_be
     # Parse checkpoint details if dictionary
     if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
         state_dict = checkpoint["model_state_dict"]
-        variant = str(checkpoint.get("model_variant", "v2")).lower().strip()
-        use_pretrained = bool(checkpoint.get("use_pretrained", True))
+        variant = checkpoint.get("model_variant", None)
+        if variant is None:
+            if "best_7_4" in os.path.basename(model_path):
+                variant = "v1"
+            else:
+                variant = "v2"
+        else:
+            variant = str(variant).lower().strip()
+            
+        use_pretrained = checkpoint.get("use_pretrained", None)
+        if use_pretrained is None:
+            if "best_7_4" in os.path.basename(model_path):
+                use_pretrained = False
+            else:
+                use_pretrained = True
+        else:
+            use_pretrained = bool(use_pretrained)
     elif isinstance(checkpoint, dict):
         state_dict = checkpoint
-        variant = "v2"
-        use_pretrained = True
+        if "best_7_4" in os.path.basename(model_path):
+            variant = "v1"
+            use_pretrained = False
+        else:
+            variant = "v2"
+            use_pretrained = True
     else:
         raise ValueError(f"Định dạng checkpoint không được hỗ trợ: {type(checkpoint)}")
         

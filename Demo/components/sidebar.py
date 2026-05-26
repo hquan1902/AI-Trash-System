@@ -34,33 +34,61 @@ def render_sidebar(history):
             "Chế độ hoạt động",
             options=[
                 "🔍 Phân loại ảnh đơn (ResNet50)",
-                "🎯 Phát hiện vật thể (Faster R-CNN)",
-                "🤝 Phát hiện + Phân loại kết hợp"
+                "🎯 Chỉ phát hiện vật thể",
+                "🤝 Phát hiện vật thể + Phân loại"
             ],
             index=2  # Combined mode by default
         )
         
-        # Defaults
-        score_threshold = 0.50
-        nms_iou_threshold = 0.40
-        cls_override_threshold = 0.65
-        
+        # Sub-selection for detection model
+        detector_path = "models/model_detection_pretrained_best_map50.pth"
         if app_mode != "🔍 Phân loại ảnh đơn (ResNet50)":
-            # Ngoc diem phat hien: Bo loc do tin cay cua Faster R-CNN (chi giu lai cac box co diem tin cay cao hon muc nay)
+            detector_choice = st.selectbox(
+                "Chọn mô hình phát hiện",
+                options=[
+                    "Mô hình pre-trained (model_detection_pretrained_best_map50.pth)",
+                    "Mô hình tự train (model_detection_best_7_4.pth)"
+                ],
+                index=0,
+                help="Chọn phiên bản mô hình Faster R-CNN để phát hiện vật thể."
+            )
+            detector_path = (
+                "models/model_detection_pretrained_best_map50.pth"
+                if "model_detection_pretrained_best_map50.pth" in detector_choice
+                else "models/model_detection_best_7_4.pth"
+            )
+        
+        # Sub-selection for classification model
+        classifier_choice = "Mô hình phân loại (ResNet50)"
+        if app_mode == "🤝 Phát hiện vật thể + Phân loại":
+            classifier_choice = st.selectbox(
+                "Chọn mô hình phân loại",
+                options=[
+                    "Mô hình của tôi (ResNet50)"
+                ],
+                index=0,
+                help="Chọn mô hình phân loại rác cho vùng vật thể phát hiện."
+            )
+            
+        # Defaults
+        score_threshold = 0.45
+        nms_iou_threshold = 0.40
+        cls_override_threshold = 0.60
+        
+        # Show detection sliders if not in classification-only mode
+        if app_mode != "🔍 Phân loại ảnh đơn (ResNet50)":
             score_threshold = st.slider(
                 "Ngưỡng điểm phát hiện (Score Thresh)", 
                 min_value=0.01, max_value=0.95, value=0.45, step=0.01,
                 help="Ngưỡng tin cậy tối thiểu để Faster R-CNN giữ lại bounding box."
             )
-            # Ngoc trung lap NMS: Loc trung cac hop bao trung len cung mot vat the (neu trung lap vuot muc nay thi giu lai hop tot nhat)
             nms_iou_threshold = st.slider(
                 "Ngưỡng trùng lặp NMS (IoU Thresh)", 
                 min_value=0.10, max_value=0.95, value=0.40, step=0.01,
                 help="Ngưỡng triệt tiêu các hộp trùng lặp (Non-Maximum Suppression)."
             )
             
-            if app_mode == "🤝 Phát hiện + Phân loại kết hợp":
-                # Ngoc ghi de ResNet50: Neu ResNet50 phan loai vung crop tu tin vuot muc nay, no se ghi de nhan cua Faster R-CNN
+            if app_mode == "🤝 Phát hiện vật thể + Phân loại" and classifier_choice == "Mô hình của tôi (ResNet50)":
                 cls_override_threshold = st.slider(
                     "Ngưỡng ghi đè (ResNet50 Override)", 
                     min_value=0.30, max_value=0.95, value=0.60, step=0.01,
@@ -128,4 +156,4 @@ def render_sidebar(history):
             st.session_state.last_processed_key = None
             st.rerun()
             
-    return app_mode, score_threshold, nms_iou_threshold, cls_override_threshold
+    return app_mode, detector_path, classifier_choice, score_threshold, nms_iou_threshold, cls_override_threshold

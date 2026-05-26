@@ -12,6 +12,8 @@ def render_scan_tab(
     classifier_model, 
     detector_model, 
     app_mode, 
+    detector_path,
+    classifier_choice,
     score_threshold, 
     nms_iou_threshold, 
     cls_override_threshold
@@ -50,7 +52,7 @@ def render_scan_tab(
         img_key = hashlib.md5(buf.getvalue()).hexdigest()
         
         # Check current run configuration state key
-        current_state_key = f"{img_key}_{app_mode}_{score_threshold}_{nms_iou_threshold}_{cls_override_threshold}"
+        current_state_key = f"{img_key}_{app_mode}_{detector_path}_{classifier_choice}_{score_threshold}_{nms_iou_threshold}_{cls_override_threshold}"
         
         # 1. Run model inferences
         run_inference_if_new_state(
@@ -60,6 +62,8 @@ def render_scan_tab(
             img_key=img_key,
             current_state_key=current_state_key,
             app_mode=app_mode,
+            detector_path=detector_path,
+            classifier_choice=classifier_choice,
             score_threshold=score_threshold,
             nms_iou_threshold=nms_iou_threshold,
             cls_override_threshold=cls_override_threshold
@@ -73,6 +77,7 @@ def render_scan_tab(
             render_left_panel(
                 image_input=image_input,
                 app_mode=app_mode,
+                classifier_choice=classifier_choice,
                 current_entries=current_entries,
                 cls_override_threshold=cls_override_threshold
             )

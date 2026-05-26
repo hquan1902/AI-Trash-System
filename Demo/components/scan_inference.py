@@ -62,6 +62,8 @@ def run_inference_if_new_state(
     img_key,
     current_state_key,
     app_mode,
+    detector_path,
+    classifier_choice,
     score_threshold,
     nms_iou_threshold,
     cls_override_threshold
@@ -94,7 +96,6 @@ def run_inference_if_new_state(
                     "top3": top3,
                 })
                 st.session_state.active_ids = [new_id]
-                
             else:
                 # Run Faster R-CNN detection
                 prediction = run_detection(
@@ -111,7 +112,12 @@ def run_inference_if_new_state(
                 
                 if num_boxes > 0:
                     image_np = np.array(image_input)
-                    if app_mode == "🤝 Phát hiện + Phân loại kết hợp":
+                    # Check if we should classify using ResNet50
+                    use_resnet = (
+                        app_mode == "🤝 Phát hiện vật thể + Phân loại" and 
+                        classifier_choice == "Mô hình của tôi (ResNet50)"
+                    )
+                    if use_resnet:
                         cls_results = classify_crops(image_np, prediction, classifier_model)
                     else:
                         cls_results = []
@@ -125,7 +131,7 @@ def run_inference_if_new_state(
                         
                         det_class_aligned = align_class_name(det_class)
                         
-                        if app_mode == "🤝 Phát hiện + Phân loại kết hợp" and idx < len(cls_results):
+                        if use_resnet and idx < len(cls_results):
                             cls_class = cls_results[idx]["class"]
                             cls_score = cls_results[idx]["score"]
                             cls_probs = cls_results[idx]["probs"].tolist()
@@ -166,5 +172,5 @@ def run_inference_if_new_state(
                     st.session_state.active_ids = new_active_ids
                 else:
                     st.session_state.active_ids = []
-                        
+                            
         st.session_state.last_processed_key = current_state_key

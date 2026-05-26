@@ -28,31 +28,46 @@ if "last_processed_key" not in st.session_state:
 if "active_ids" not in st.session_state:
     st.session_state.active_ids = []
 
+# 5. Render Sidebar (Run first to determine which models to load)
+sidebar_out = render_sidebar(st.session_state.history)
+app_mode = sidebar_out[0]
+detector_path = sidebar_out[1]
+classifier_choice = sidebar_out[2]
+score_threshold = sidebar_out[3]
+nms_iou_threshold = sidebar_out[4]
+cls_override_threshold = sidebar_out[5]
+
 # 4. Lazy Load Models (Cached)
 @st.cache_resource(show_spinner=False)
 def get_cached_classifier():
     return load_user_classifier()
 
 @st.cache_resource(show_spinner=False)
-def get_cached_detector():
-    return load_friend_detector()
+def get_cached_detector(model_path):
+    return load_friend_detector(model_path)
 
-try:
-    classifier_model = get_cached_classifier()
-    device_cls = "GPU" if next(classifier_model.parameters()).is_cuda else "CPU"
-except Exception as e:
-    st.error(f"❌ Không load được mô hình ResNet50 (Phân loại): {e}")
-    st.stop()
+# Load detector model dynamically based on selection
+detector_model = None
+device_det = "N/A"
+if app_mode != "🔍 Phân loại ảnh đơn (ResNet50)":
+    try:
+        detector_model = get_cached_detector(detector_path)
+        device_det = "GPU" if next(detector_model.parameters()).is_cuda else "CPU"
+    except Exception as e:
+        import os
+        st.error(f"❌ Không load được mô hình Faster R-CNN ({os.path.basename(detector_path)}): {e}")
+        st.stop()
 
-try:
-    detector_model = get_cached_detector()
-    device_det = "GPU" if next(detector_model.parameters()).is_cuda else "CPU"
-except Exception as e:
-    st.error(f"❌ Không load được mô hình Faster R-CNN (Nhận diện): {e}")
-    st.stop()
-
-# 5. Render Sidebar
-app_mode, score_threshold, nms_iou_threshold, cls_override_threshold = render_sidebar(st.session_state.history)
+# Load classifier model if selected
+classifier_model = None
+device_cls = "N/A"
+if app_mode == "🔍 Phân loại ảnh đơn (ResNet50)" or (app_mode == "🤝 Phát hiện vật thể + Phân loại" and classifier_choice == "Mô hình của tôi (ResNet50)"):
+    try:
+        classifier_model = get_cached_classifier()
+        device_cls = "GPU" if next(classifier_model.parameters()).is_cuda else "CPU"
+    except Exception as e:
+        st.error(f"❌ Không load được mô hình ResNet50 (Phân loại): {e}")
+        st.stop()
 
 # 6. Main App Header
 st.markdown("""
@@ -100,6 +115,8 @@ with tab_scan:
         classifier_model=classifier_model,
         detector_model=detector_model,
         app_mode=app_mode,
+        detector_path=detector_path,
+        classifier_choice=classifier_choice,
         score_threshold=score_threshold,
         nms_iou_threshold=nms_iou_threshold,
         cls_override_threshold=cls_override_threshold

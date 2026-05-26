@@ -257,9 +257,8 @@ def render_detection_results(image_input, det_entries):
 def render_right_panel(image_input, app_mode, current_entries):
     """Orchestrates left-right column routing for displaying detection/classification analytics."""
     st.markdown("<div class='section-title'>Kết Quả Phân Tích</div>", unsafe_allow_html=True)
-    if app_mode == "🔍 Phân loại ảnh đơn (ResNet50)":
-        if len(current_entries) > 0:
-            render_classification_results(image_input, current_entries[0])
+    if len(current_entries) > 0 and current_entries[0]["type"] == "classification":
+        render_classification_results(image_input, current_entries[0])
     else:
         det_entries = [e for e in current_entries if e["type"] == "detection"]
         render_detection_results(image_input, det_entries)
