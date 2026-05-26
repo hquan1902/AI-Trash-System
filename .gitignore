@@ -216,3 +216,8 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+#Markdown
+COMPREHENSIVE_REPORT_WEEK3-4.md
+DETECTION_TRAINING_HISTORY_FULL.md
+web/

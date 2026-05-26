@@ -82,7 +82,7 @@ def load_user_classifier(model_path: str = "models/best_resnet50.pth") -> torch.
     m.eval()
     return m
 
-def load_friend_detector(model_path: str = "models/model_detection_pretrained_best_map50.pth") -> torch.nn.Module:
+def load_friend_detector(model_path: str = "models/detection_pretrained/model_detection_pretrained_best_map50.pth") -> torch.nn.Module:
     """Load the friend's Faster R-CNN detection model."""
     device = get_device()
     

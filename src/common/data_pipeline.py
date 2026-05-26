@@ -25,7 +25,7 @@ val_transform = transforms.Compose([
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
 ])
 
-
+# không cần dùng đến nữa
 class ClassificationDataset(Dataset):
     def __init__(self, root_dir, transform=None):
         self.samples = []

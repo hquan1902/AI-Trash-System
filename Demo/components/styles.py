@@ -24,6 +24,20 @@ html, body, [class*="css"] { font-family: 'IBM Plex Sans', sans-serif; }
     width: 100%;
 }
 
+button[aria-label="✅  Đúng rồi"],
+button[aria-label="✅ Đúng"] {
+    background: #E6F4EA !important;
+    color: #1E7E34 !important;
+    border: 1px solid #B7E3C0 !important;
+}
+
+button[aria-label="❌  Sai, muốn sửa"],
+button[aria-label="❌ Sai"] {
+    background: #FDECEC !important;
+    color: #B42318 !important;
+    border: 1px solid #F5B5B0 !important;
+}
+
 .metric-card {
     background: #FFFFFF;
     border: 1px solid #DDE8DD;
