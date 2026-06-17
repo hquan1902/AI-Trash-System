@@ -41,7 +41,11 @@ def render_sidebar(history):
         )
         
         # Sub-selection for detection model
+        import os
         detector_path = "models/detection_pretrained/model_detection_pretrained_best_map50.pth"
+        if not os.path.exists(detector_path):
+            detector_path = "models/model_detection_pretrained_best_map50.pth"
+            
         if app_mode != "Phân loại ảnh đơn (ResNet50)":
             detector_choice = st.selectbox(
                 "Chọn mô hình phát hiện",
@@ -52,11 +56,14 @@ def render_sidebar(history):
                 index=0,
                 help="Chọn phiên bản mô hình Faster R-CNN để phát hiện vật thể."
             )
-            detector_path = (
-                "models/detection_pretrained/model_detection_pretrained_best_map50.pth"
-                if "model_detection_pretrained_best_map50.pth" in detector_choice
-                else "models/detection_train_from_scratch/model_detection_best_7_4.pth"
-            )
+            if "model_detection_pretrained_best_map50.pth" in detector_choice:
+                detector_path = "models/detection_pretrained/model_detection_pretrained_best_map50.pth"
+                if not os.path.exists(detector_path):
+                    detector_path = "models/model_detection_pretrained_best_map50.pth"
+            else:
+                detector_path = "models/detection_train_from_scratch/model_detection_best_7_4.pth"
+                if not os.path.exists(detector_path):
+                    detector_path = "models/model_detection_best_7_4.pth"
         
         # Sub-selection for classification model
         classifier_choice = "Mô hình phân loại (ResNet50)"
@@ -64,7 +71,7 @@ def render_sidebar(history):
             classifier_choice = st.selectbox(
                 "Chọn mô hình phân loại",
                 options=[
-                    "Mô hình của tôi (ResNet50)"
+                    "Mô hình phân loại (ResNet50)"
                 ],
                 index=0,
                 help="Chọn mô hình phân loại rác cho vùng vật thể phát hiện."
@@ -88,7 +95,7 @@ def render_sidebar(history):
                 help="Ngưỡng triệt tiêu các hộp trùng lặp (Non-Maximum Suppression)."
             )
             
-            if app_mode == "Phát hiện vật thể + Phân loại" and classifier_choice == "Mô hình của tôi (ResNet50)":
+            if app_mode == "Phát hiện vật thể + Phân loại" and classifier_choice == "Mô hình phân loại (ResNet50)":
                 cls_override_threshold = st.slider(
                     "Ngưỡng ghi đè (ResNet50 Override)", 
                     min_value=0.30, max_value=0.99, value=0.60, step=0.01,

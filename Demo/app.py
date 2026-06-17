@@ -49,7 +49,7 @@ def get_cached_detector(model_path):
 # Load detector model dynamically based on selection
 detector_model = None
 device_det = "N/A"
-if app_mode != "🔍 Phân loại ảnh đơn (ResNet50)":
+if app_mode != "Phân loại ảnh đơn (ResNet50)":
     try:
         detector_model = get_cached_detector(detector_path)
         device_det = "GPU" if next(detector_model.parameters()).is_cuda else "CPU"
@@ -61,7 +61,7 @@ if app_mode != "🔍 Phân loại ảnh đơn (ResNet50)":
 # Load classifier model if selected
 classifier_model = None
 device_cls = "N/A"
-if app_mode == "🔍 Phân loại ảnh đơn (ResNet50)" or (app_mode == "🤝 Phát hiện vật thể + Phân loại" and classifier_choice == "Mô hình của tôi (ResNet50)"):
+if app_mode == "Phân loại ảnh đơn (ResNet50)" or (app_mode == "Phát hiện vật thể + Phân loại" and classifier_choice == "Mô hình phân loại (ResNet50)"):
     try:
         classifier_model = get_cached_classifier()
         device_cls = "GPU" if next(classifier_model.parameters()).is_cuda else "CPU"

@@ -17,8 +17,10 @@ def render_left_panel(image_input, app_mode, classifier_choice, current_entries,
     """Renders the left panel containing the image preview and bounding boxes."""
     st.markdown("<div class='section-title'>Ảnh Đầu Vào & Nhận Diện</div>", unsafe_allow_html=True)
     
-    if app_mode == "🔍 Phân loại ảnh đơn (ResNet50)":
+    if app_mode == "Phân loại ảnh đơn (ResNet50)":
         st.image(image_input, use_container_width=True)
+        st.markdown(f"<div style='font-size:0.75rem;color:#8AAA8A;margin-top:0.3rem'>{image_input.width} × {image_input.height} px</div>", unsafe_allow_html=True)
+        return
     else:
         image_np = np.array(image_input)
         det_entries = [e for e in current_entries if e["type"] == "detection"]
@@ -52,8 +54,8 @@ def render_left_panel(image_input, app_mode, classifier_choice, current_entries,
     else:
         if len(det_entries) > 0:
             use_resnet = (
-                app_mode == "🤝 Phát hiện vật thể + Phân loại" and 
-                classifier_choice == "Mô hình của tôi (ResNet50)"
+                app_mode == "Phát hiện vật thể + Phân loại" and 
+                classifier_choice == "Mô hình phân loại (ResNet50)"
             )
             if use_resnet:
                 cls_res_fmt = [{"class": e["cls_class"], "score": e["cls_score"]/100.0} for e in det_entries]

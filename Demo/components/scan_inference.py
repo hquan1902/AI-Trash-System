@@ -76,7 +76,7 @@ def run_inference_if_new_state(
             date_str = datetime.now().strftime("%d/%m/%Y")
             scan_time = int(time.time() * 1000)
             
-            if app_mode == "🔍 Phân loại ảnh đơn (ResNet50)":
+            if app_mode == "Phân loại ảnh đơn (ResNet50)":
                 probs, top3 = predict_classification(image_input, classifier_model)
                 label = USER_CLASS_NAMES[top3[0]]
                 conf = probs[top3[0]] * 100
@@ -114,8 +114,8 @@ def run_inference_if_new_state(
                     image_np = np.array(image_input)
                     # Check if we should classify using ResNet50
                     use_resnet = (
-                        app_mode == "🤝 Phát hiện vật thể + Phân loại" and 
-                        classifier_choice == "Mô hình của tôi (ResNet50)"
+                        app_mode == "Phát hiện vật thể + Phân loại" and 
+                        classifier_choice == "Mô hình phân loại (ResNet50)"
                     )
                     if use_resnet:
                         cls_results = classify_crops(image_np, prediction, classifier_model)
