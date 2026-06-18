@@ -18,24 +18,79 @@ html, body, [class*="css"] { font-family: 'IBM Plex Sans', sans-serif; }
 [data-testid="stSidebar"] hr { border-color: #2E3E2E !important; }
 [data-testid="stSidebar"] .stButton > button {
     background: #2E3E2E !important;
-    color: #C8D8C0 !important;
     border: 1px solid #3E5040 !important;
     border-radius: 8px !important;
     width: 100%;
 }
-
-button[aria-label="✅  Đúng rồi"],
-button[aria-label="✅ Đúng"] {
-    background: #E6F4EA !important;
-    color: #1E7E34 !important;
-    border: 1px solid #B7E3C0 !important;
+[data-testid="stSidebar"] .stButton > button * {
+    color: #C8D8C0 !important;
+}
+[data-testid="stSidebar"] .stButton > button:hover {
+    background: #3E5040 !important;
 }
 
-button[aria-label="❌  Sai, muốn sửa"],
-button[aria-label="❌ Sai"] {
-    background: #FDECEC !important;
-    color: #B42318 !important;
+/* Style all buttons in the main content area to ensure high contrast and premium feel */
+.stButton > button, 
+.stDownloadButton > button {
+    background-color: #FFFFFF !important;
+    border: 1px solid #DDE8DD !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+.stButton > button *, 
+.stDownloadButton > button * {
+    color: #1A2A1A !important;
+}
+.stButton > button:hover, 
+.stDownloadButton > button:hover {
+    background-color: #EEF4EE !important;
+    border-color: #B8D8B8 !important;
+}
+
+/* Green feedback button style using substring selector to be resilient */
+button[aria-label*="Đúng"] {
+    background-color: #E6F4EA !important;
+    border: 1px solid #B7E3C0 !important;
+}
+button[aria-label*="Đúng"] * {
+    color: #1E7E34 !important;
+    font-weight: 600 !important;
+}
+button[aria-label*="Đúng"]:hover {
+    background-color: #D4EDDA !important;
+    border-color: #C3E6CB !important;
+}
+
+/* Red feedback button style */
+button[aria-label*="Sai"] {
+    background-color: #FDECEC !important;
     border: 1px solid #F5B5B0 !important;
+}
+button[aria-label*="Sai"] * {
+    color: #B42318 !important;
+    font-weight: 600 !important;
+}
+button[aria-label*="Sai"]:hover {
+    background-color: #FADBD8 !important;
+    border-color: #F5B7B1 !important;
+}
+
+/* Blue download button style for Export CSV */
+button[aria-label*="Xuất lịch sử"],
+button[aria-label*="CSV"] {
+    background-color: #E8F0FE !important;
+    border: 1px solid #D2E3FC !important;
+}
+button[aria-label*="Xuất lịch sử"] *,
+button[aria-label*="CSV"] * {
+    color: #1A73E8 !important;
+    font-weight: 600 !important;
+}
+button[aria-label*="Xuất lịch sử"]:hover,
+button[aria-label*="CSV"]:hover {
+    background-color: #D2E3FC !important;
+    border-color: #A5C2F9 !important;
 }
 
 .metric-card {
